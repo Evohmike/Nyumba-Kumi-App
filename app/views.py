@@ -16,7 +16,7 @@ from django.contrib.auth.decorators import login_required
 
 def index(request):
 
-    title = 'Hello'
+    title = 'Nyumba-kumi'
 
     return render(request, 'index.html', {'title': title})
 
