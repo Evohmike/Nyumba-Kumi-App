@@ -1,28 +1,63 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Navbar</a>
+    <a class="navbar-brand" href=""><img src="https://png.icons8.com/doodle/50/000000/home.png" style="height:30px;width:30px;">
+    </a>
+  <a class="navbar-brand" href="/">NYUMBA-KUMI</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
+
+  <div class="col-xs-7 col-md-6">
+    <div class="row">
+      
+        <div class="col-md-2 container search-section">
+          <div class="row">
+              
+              <!-- Search form -->
+<div class="md-form active-pink-2 mb-3">
+  <input class="form-control" type="text" action=" " placeholder="Search" aria-label="Search">
+</div>
+          </div>
+      </div>
      
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>
-     
-    </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
+      
+    </div>
   </div>
+  
+  <div class="col-md-2">
+    {% if user.is_authenticated %}
+    <div class="dropdown">
+        <a class="btn btn dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false"><span style="cursor:pointer">&#9776;</span>
+        </a>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="">Profile</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Post News</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Create Neighbourhood</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Create Business</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Settings</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/logout">Logout <img style="width: 20px; float: right;"
+                    src="https://image.flaticon.com/icons/png/512/126/126467.png" alt=""></a>
+        </div>
+    </div>
+</div>
+{% else %}
+
+<a class='btn btn-default' href="/accounts/login">Login</a>
+
+{% endif %}
+</div>
+  
+  <div class="col-xs-2 col-md-2" id="omena" style="padding-top:15px; text-align:center">
+      <a href="" style="color:black; font-size:14px; text-decoration: none; ">SUBMIT
+      </a>
+  </div>
+
 </nav> 
+
+
