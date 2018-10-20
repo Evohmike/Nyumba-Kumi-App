@@ -12,6 +12,14 @@ from .tokens import account_activation_token
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
 
+from django.contrib.auth.decorators import login_required
+
+def index(request):
+
+    title = 'Hello'
+
+    return render(request, 'index.html', {'title': title})
+
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
