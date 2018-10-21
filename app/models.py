@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.db import IntegrityError
+
 
 
 
@@ -16,49 +18,116 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    Name = models.TextField(default="Anonymous")
-    profile_picture = models.ImageField(upload_to='users/')
-    bio = models.TextField(default="I'm using hoodwatch")
-    # neighbourhood = models.ForeignKey(Neighbourhood, blank=True, null=True, related_name='people')
-
-    def __str__(self):
-        return f'Profile {self.user.username}'
-
-
+# Create your models here.
 class Neighbourhood(models.Model):
-    Name = models.TextField()
-    display = models.ImageField(upload_to='groups/')
-    admin = models.ForeignKey("Profile", related_name='hoods')
-    description = models.TextField(default='Random group')
-    police = models.TextField(default="999")
-    health = models.TextField(default="213")
+    name = models.CharField(max_length = 65)
+    locations = (
+        ('Nairobi', 'Nairobi'),
+        ('Zurich', 'Zurich'),
+        ('Paris', 'Paris'),
+        ('Munich', 'Munich'),
+        ('Tokyo', 'Tokyo'),
+        ('London', 'London'),
+        ('Melbourne', 'Melbourne'),
+        ('Sydney', 'Sydney'),
+        ('Berlin', 'Berlin')
+    )
+    loc  = models.CharField(max_length=65, choices=locations)
+    occupants = models.PositiveIntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = 'Location'
+
+    @classmethod
+    def search_hood(cls, search_term):
+        hoods = cls.objects.filter(name__icontains=search_term)
+        return hoods
 
     def __str__(self):
-        return self.Name
+        return f"{self.loc}"
 
+
+    def save_hood(self):
+        self.save()
+
+    def delete_hood(self):
+        self.delete()
+
+class Profile(models.Model):
+    name = models.CharField(max_length = 65, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    hood = models.ForeignKey(Neighbourhood, blank=True, null=True)
+    bio = models.TextField(max_length=200)
+
+    def __str__(self):
+        return self.name
+
+
+    def save_profile(self):
+        self.save()
+
+    def delete_profile(self):
+        self.delete()
+
+    
+    @classmethod
+    def get_by_id(cls,id):
+        profile = cls.objects.get(user = id)
+        return profile
 
 class Business(models.Model):
-    Name = models.TextField()
-    owner = models.ForeignKey(Profile)
-    show_my_email = models.BooleanField(default=True)
-    description = models.TextField(default='Local business')
-    neighbourhood = models.ForeignKey(Neighbourhood, related_name='biashara')
+    name = models.CharField(max_length = 65)
+    user = models.ForeignKey(User)
+    hood = models.ForeignKey(Neighbourhood,blank=True)
+    email = models.CharField(max_length=100)
 
-    @property
-    def email(self):
-        return self.owner.user.email
+
+    def __str__(self):
+        return self.name
+
+
+    def save_business(self):
+        self.save()
+
+    def delete_business(self):
+        self.delete()
+
+    @classmethod
+    def get_biz(cls, hood):
+        hoods = Business.objects.filter(hood_id=Neighbourhood)
+        return hoods
 
 
 class Post(models.Model):
-    user = models.ForeignKey(Profile)
-    Text = models.TextField()
-    neighbourhood = models.ForeignKey(Neighbourhood, related_name='posts')
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    description = models.TextField(max_length=300)
+    hood = models.ForeignKey(Neighbourhood, blank=True,on_delete=models.CASCADE)
+    title = models.CharField(max_length = 65)
+        
+    def __str__(self):
+        return self.description
+
+class Join(models.Model):
+    user_id = models.OneToOneField(User)
+    hood_id = models.ForeignKey(Neighbourhood)
+
+    def __str__(self):
+        return self.user_id
 
 
 
+class Comments(models.Model):
+    comment = models.CharField(max_length = 600)
+    user = models.ForeignKey(User)
+    post = models.ForeignKey(Post)
 
+    def save_comment(self):
+        self.save()
 
+    def delete_comment(self):
+        self.delete()
 
-
+    def __str__(self):
+        return self.comment
