@@ -8,7 +8,7 @@ from django.dispatch import receiver
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     Name = models.TextField(default="Anonymous")
-    profile_picture = models.ImageField(upload_to='users/', default='users/user.png')
+    profile_picture = models.ImageField(upload_to='users/')
     bio = models.TextField(default="I'm using hoodwatch")
     neighbourhood = models.ForeignKey(Neighbourhood, blank=True, null=True, related_name='people')
 
@@ -29,7 +29,7 @@ def save_user_profile(sender, instance, **kwargs):
 
 class Neighbourhood(models.Model):
     Name = models.TextField()
-    display = models.ImageField(upload_to='groups/', default='groups/group.png')
+    display = models.ImageField(upload_to='groups/')
     admin = models.ForeignKey("Profile", related_name='hoods')
     description = models.TextField(default='Random group')
     police = models.TextField(default="999")
@@ -37,6 +37,15 @@ class Neighbourhood(models.Model):
 
     def __str__(self):
         return self.Name
+
+
+class Business(models.Model):
+    Name = models.TextField()
+    owner = models.ForeignKey(Profile)
+    show_my_email = models.BooleanField(default=True)
+    description = models.TextField(default='Local business')
+    neighbourhood = models.ForeignKey(Neighbourhood, related_name='biashara')
+
 
 
 
