@@ -5,16 +5,6 @@ from django.dispatch import receiver
 
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    Name = models.TextField(default="Anonymous")
-    profile_picture = models.ImageField(upload_to='users/')
-    bio = models.TextField(default="I'm using hoodwatch")
-    neighbourhood = models.ForeignKey(Neighbourhood, blank=True, null=True, related_name='people')
-
-    def __str__(self):
-        return f'Profile {self.user.username}'
-
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -25,6 +15,16 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    Name = models.TextField(default="Anonymous")
+    profile_picture = models.ImageField(upload_to='users/')
+    bio = models.TextField(default="I'm using hoodwatch")
+    # neighbourhood = models.ForeignKey(Neighbourhood, blank=True, null=True, related_name='people')
+
+    def __str__(self):
+        return f'Profile {self.user.username}'
 
 
 class Neighbourhood(models.Model):
@@ -45,6 +45,11 @@ class Business(models.Model):
     show_my_email = models.BooleanField(default=True)
     description = models.TextField(default='Local business')
     neighbourhood = models.ForeignKey(Neighbourhood, related_name='biashara')
+
+    @property
+    def email(self):
+        return self.owner.user.email
+
 
 class Post(models.Model):
     user = models.ForeignKey(Profile)
