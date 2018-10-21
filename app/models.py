@@ -46,6 +46,12 @@ class Business(models.Model):
     description = models.TextField(default='Local business')
     neighbourhood = models.ForeignKey(Neighbourhood, related_name='biashara')
 
+class Post(models.Model):
+    user = models.ForeignKey(Profile)
+    Text = models.TextField()
+    neighbourhood = models.ForeignKey(Neighbourhood, related_name='posts')
+
+
 
 
 
