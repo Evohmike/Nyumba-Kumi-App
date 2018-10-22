@@ -86,7 +86,7 @@ def display_profile(request, id):
 
 
 @login_required(login_url = '/accounts/login')
-def all_hoods(request):
+def hoods(request):
 
     if request.user.is_authenticated:
         if Join.objects.filter(user_id=request.user).exists():
