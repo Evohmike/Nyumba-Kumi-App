@@ -1,32 +1,31 @@
-{% extends 'base.html'%}
-
-
-{% load bootstrap4 %}
+{% extends 'base.html'%} 
+{% load bootstrap4 %} 
 {% block content %}
 
 
 <div class="container">
-    <hr>
-    <i class="fa fa-plus">
-        <a href=""> create hood here</a></i>
-    <hr>
+  <hr>
+  <div class="">
+    <a href="{% url 'createHood' %}"> <button type="button" class="btn btn-primary btn-lg btn-block">Create Hood</button></a>
+  </div>
 
- <div class="row">
+  <hr>
 
-   {% for hood in hoods %}
-   <div class="col-md-4">
-     <div class="card">
-         {{hood.name.capitalize}}
-       <div class="card-body" style="width: auto">
-         <p>{{hood.occupants}} Occupants </p>
-           <p> <i class="fa fa-map-marker" aria-hidden="true"> {{ hood.loc }}</i></p>
-         <a href=" {% url 'joinHood' hood.id %}" class="btn btn-sm btn-success">Join</a>
-       </div>
-     </div>
-   </div>
-
-   {% endfor %}
- </div>
-</div>
-{% endblock %}
-
+  <div class="row">
+    {% for hood in hoods %}
+    <div class="col-md-4">
+      <div class="card">
+        <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg" alt="Card image cap">
+        <div class="card-body">
+          <h4 class="card-title">{{hood.name.capitalize}}</h4>
+          <p class="card-text">{{hood.occupants}} Occupants.</p>
+          <hr>
+          <p> <i class="fa fa-map-marker" aria-hidden="true"> {{ hood.loc }}</i></p>
+          <a href="#" class="btn btn-primary">Join hood</a>
+        </div>
+      </div>
+    </div>
+      {% endfor %}
+    
+  </div>
+  {% endblock %}
