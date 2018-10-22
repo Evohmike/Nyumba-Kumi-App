@@ -1,0 +1,19 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% load bootstrap4 %} 
+{% block content %} 
+{{ form.media }}
+<div class="container">
+  <div class="row">
+      <ul class="list-inline">
+        <li class="list-inline-item">
+          <p>{{profile_details.bio}}</p>
+          <p>{{ profile_details.user }}</p>
+        </li>
+      </ul>
+      <p><a href="">Create a business</a></p>
+      <p><a href="">Make a Post</a></p>
+  </div>
+</div>
+
+{% endblock %}
