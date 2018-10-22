@@ -23,12 +23,16 @@ from django.contrib.auth.decorators import login_required
 
 # @login_required(login_url = '/accounts/login')
 def home(request):
-    title = 'Nyumba-kumi'
-    hoods = Neighbourhood.objects.all()
-    business = Business.objects.all()
-    posts = Post.objects.all()
+    if Join.objects.filter(user_id = request.user).exists():
+        hood = Neighbourhood.objects.get(pk = request.user.join.hood_id)    
+        return render(request,'hood.html', locals())
 
-    return render(request,'home.html',locals())
+    else:
+        title = 'Nyumba-kumi'
+        hoods = Neighbourhood.objects.all()
+    
+
+        return render(request,'home.html',locals())
 
 
 def signup(request):
@@ -84,25 +88,25 @@ def display_profile(request, id):
 
 
 
+@login_required(login_url='/accounts/login/')
+def join(request , hoodid):
 
-@login_required(login_url = '/accounts/login')
-def hoods(request):
-
-    if request.user.is_authenticated:
-        if Join.objects.filter(user_id=request.user).exists():
-            hood = Neighbourhood.objects.get(pk=request.user.join.hood_id.id)
-            businesses = Business.objects.filter(hood=request.user.join.hood_id.id)
-            posts = Post.objects.filter(hood=request.user.join.hood_id.id)
-            comments = Comments.objects.all()
-            print(posts)
-            return render(request, "hood.html", locals())
-        else:
-            neighbourhoods = Neighbourhood.objects.all()
-            return render(request, 'hood.html', locals())
+    this_hood = Neighbourhood.objects.get(pk = hoodid)
+    if Join.objects.filter(user = request.user).exists():
+        Join.objects.filter(user_id = request.user).update(hood_id = this_hood.id)
     else:
-        neighbourhoods = Neighbourhood.objects.all()
+        Join(user=request.user, hood_id = this_hood.id).save()
+    messages.success(request, 'Success! You have succesfully joined this Neighbourhood ')
+    return redirect('home')
 
-        return render(request, 'hood.html', locals())
+
+
+@login_required(login_url='/accounts/login/')
+def exithood(request, id):
+    Join.objects.get(user_id = request.user).delete()
+    messages.error(request, "Neighbourhood exited")
+    return redirect('home')
+
 
 
 
@@ -116,7 +120,7 @@ def createHood(request):
             hood.user = request.user
             hood.save()
             messages.success(request, 'You Have succesfully created a hood.You may now join your neighbourhood')
-            return redirect('hoods')
+            return redirect('home')
     else:
         form = CreateHoodForm()
         return render(request,'create.html',{"form":form})

@@ -15,13 +15,13 @@
     {% for hood in hoods %}
     <div class="col-md-4">
       <div class="card">
-        <img class="card-img-top" src="{{hood.hood_photo.url}}" alt="Card image cap">
-        <div class="card-body">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d15955.167726591344!2d36.77858156977538!3d-1.299649699999992!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2ske!4v1540221899248" width="345" height="250" frameborder="0" style="border:0" allowfullscreen></iframe>
+          <div class="card-body">
           <h4 class="card-title">{{hood.name.capitalize}}</h4>
           <p class="card-text">{{hood.occupants}} Occupants.</p>
           <hr>
           <p> <i class="fa fa-map-marker" aria-hidden="true"> {{ hood.loc }}</i></p>
-          <a href="#" class="btn btn-primary">Join hood</a>
+          <a href="{% url 'joinhood' hood.id %}" class="btn btn-primary">Join hood</a>
         </div>
       </div>
     </div>

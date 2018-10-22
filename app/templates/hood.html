@@ -1,112 +1,91 @@
-
-{%extends 'registration/base.html'%}
-{%load bootstrap4 %}
-{% block content%}
-
-<style>
-     .jumbotron{
-        width: 100%;
-        margin-left: 1%;
-        background-color: #447e9b;
-        text-align: center;
-    }
-</style>
-	<div class="container">
-
-			<div class="row">
-                <div class="col-md-8">
-				<h2><strong>{{hood.name.capitalize}}</strong></h2>
-                <hr>
-                <h4>Location: <strong>{{hood.loc.capitalize}}</strong></h4>
-                <p>{{hood.occupants}} Occupants</p>
-				<h4>{{hood.bio}}</h4>
-
-				<a class="btn btn-sm btn-success" href="{% url 'newpost' %}">Create a Post</a>
-				<a class="btn btn-sm btn-danger" href="  {% url 'business' %}">Add busines</a>
-
-				<p>
-				<div>
-
-				  <div class="row text-center">
-				    <small> Businesses in this hood</small>
-                      <hr>
+{%extends 'base.html' %}
+{% load static%}
 
 
-				  </div>
-
-                        <table class="table table-striped table-dark">
-                                  <thead>
-                                    <tr>
-                                      <th scope="col">#</th>
-                                      <th scope="col">Business</th>
-                                        <th scope="col">Owner</th>
-                                        <th scope="col">Neighbourhood</th>
-                                        <th scope="col">Business Email</th>
-
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                  {% if businesses %}
-                                      {% for biz in businesses %}
-                                    <tr>
-                                      <th scope="row">1</th>
-                                      <td>{{biz.name.capitalize}}</td>
-                                      <td>{{biz.user}}</td>
-                                      <td>{{ biz.hood }}</td>
-                                        <td>{{biz.email}}</td>
-                                    </tr>
-                                  	{%endfor%}
-                                  {% else %}
-                                      <h4 class="text-center">No Business has been created for this hood yet. Be the first to create on <a href="{% url 'business' %}">here</a></h4>
-                                  {% endif %}
-                                  </tbody>
-                                </table>
-                {%if posts%}
-                    <div class="row">
-				    		<div class="col-md-7"></div>
-				    		<div class="col-md-5">
-				    			<form class="" class="" action="{% url 'search' %}">
-						            <div class="form-group">
-						              <input type="text" class="form-control" placeholder="Search Forum" name = "searchForum">
-						            </div>
-
-						        </form>
-				    		</div>
-              </div>
-
-				    	<div class="row">
-				    		{% for post in posts %}
-					    		<div class="jumbotron"><h3 style="text-align: center">Posts</h3>
-                                      <div class="card" style="margin-bottom:50px">
-                                          <div class="card-title"><strong>{{ post.title }}</strong>
-                                          </div>
-                                          <div class="card-body">
-                                              <p>{{post.description}}
-                                <p><a href="{% url 'comment' post_id=post.id %}"><i class="fa fa-comment" aria-hidden="true" style="color:black;"></i>Add Comment</a></p>
-
-                                {%if comments%}
-                                    <small>Comments</small>
-                                                {% for comment in comments %}
-                                                    <p>{{ comment.comment }}</p>
-
-                                                {% endfor %}
+{% block styles%}
+{{block.super}}
+<link href="https://fonts.googleapis.com/css?family=Alfa+Slab+One|Concert+One|Overlock" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/hood.css' %}">
+{% endblock %}
 
 
-                                            {% else %}
-                                            <h4 class="text-center">No comments</h4>
-                                            {% endif %}
-                                            <hr>
-                                          </div>
-                                      </div>
-                                </div>
+{% block content %}
+<div class="container-fluid">
+    <div class="header">
+        <h2 class="head">Welcome to {{hood.name}} resident</h2>
+        <hr>
+        <h4 class="destitle">Description</h4>
+        <br>
+        <p class="desc">{{hood.description}}</p>
+        <br>
+        <h4 class="destitle">Contact Information</h4>
+        <br>
+        <p class="desc">Police :&nbsp;&nbsp;&nbsp;{{hood.police}} </p>
+        <p class="desc">Health :&nbsp;&nbsp;&nbsp;{{hood.health}} </p>
+        <br>
+        <center>
+            <a href="/exithood/{{hood.id}}" class="btn btn-warning"> Exit Neighbourhood </a>
+        </center>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="header">
 
-				    		{% endfor %}
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#biz">View posts </a></li>
+            <li><a data-toggle="tab" href="#tech">View Businesses</a></li>
+        </ul>
 
-				    	</div>
+        <div class="tab-content">
+            <div class="tab-pane fade in active" id="biz">
 
-				    	{% else %}
-				    	<h4 class="text-center">No Post has been created for this hood yet. Be the first to create on <a href="{% url 'newpost' %}">here</a></h4>
-				    	{% endif %}
+                <a href="" class="btn btn-success btn btn-sm"><span class="glyphicon glyphicon-plus">
+                        Create post</span></a>
 
+                {% if posts %}
+                {% for post in posts %}
+                <ul>
+                    <li>{{post.body}}</li>
+                </ul>
+                {% endfor %}
+                {%else%}
+                <center>
+                    <p>There are no posts yet</p>
+                </center>
+                {% endif %}
 
-{%endblock%}
+            </div>
+            <div class="tab-pane fade" id="tech">
+
+                <a href="" class="btn btn-success btn btn-sm"><span class="glyphicon glyphicon-plus">
+                        Create business</span></a>
+                {% if biz %}
+               
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Email</th>
+                    </tr>
+                    <tr>
+                     {% for biz in biz %}
+                        <td>{{biz.name}}</td>
+                        <td>{{biz.description}}</td>
+                        <td>{{biz.email}}</td>
+                       
+                    </tr>
+                       {% endfor %}
+                </table>
+              
+                {%else%}
+                <center>
+                    <p>There are no listed businesses yet</p>
+                </center>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock%}

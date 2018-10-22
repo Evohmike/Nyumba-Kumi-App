@@ -9,9 +9,11 @@ urlpatterns=[
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         views.activate, name='activate'),
 
-    url(r'^hoods', views.hoods, name='hoods'),
+    # url(r'^hoods', views.hoods, name='hoods'),
+    url(r'^join/(\d+)$',views.join, name = 'joinhood'),
     url(r'^createHood/$', views.createHood, name='createHood'),
     url(r'^showprofile/(?P<id>\d+)', views.display_profile, name='showprofile'),
+    url(r'^exithood/(\d+)$', views.exithood, name='exithood'),
 
 
 ]
