@@ -11,6 +11,9 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
+from django.contrib import messages
+
+from . forms import *
 
 from .models import *
 
@@ -67,6 +70,19 @@ def activate(request, uidb64, token):
         return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
     else:
         return HttpResponse('Activation link is invalid!')
+
+
+@login_required(login_url='/accounts/login/')
+def display_profile(request, id):
+    seekuser=User.objects.filter(id=id).first()
+    profile = seekuser.profile
+    profile_details = Profile.get_by_id(id)
+
+
+
+    return render(request,'profile.html',locals())
+
+
 
 
 @login_required(login_url = '/accounts/login')
