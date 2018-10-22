@@ -21,7 +21,7 @@ from .models import *
 from django.contrib.auth.decorators import login_required
 
 
-# @login_required(login_url = '/accounts/login')
+@login_required(login_url = '/accounts/login')
 def home(request):
     if Join.objects.filter(user_id = request.user).exists():
         hood = Neighbourhood.objects.get(pk = request.user.join.hood_id)    
