@@ -33,8 +33,9 @@ class Neighbourhood(models.Model):
         ('Buruburu', 'Buruburu')
     )
     loc  = models.CharField(max_length=65, choices=locations)
-    hood_photo= models.ImageField(upload_to='images/', blank=True,)
     occupants = models.PositiveIntegerField()
+    police = models.CharField(max_length=15, default='9999')
+    health = models.CharField(max_length=15, default='071000000')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
@@ -46,7 +47,7 @@ class Neighbourhood(models.Model):
         return hoods
 
     def __str__(self):
-        return f"{self.loc}"
+        return self.name
 
 
     def save_hood(self):
@@ -56,10 +57,9 @@ class Neighbourhood(models.Model):
         self.delete()
 
 class Profile(models.Model):
-    name = models.CharField(max_length = 65, blank=True)
+    name = models.CharField(max_length = 70, blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     hood = models.ForeignKey(Neighbourhood, blank=True, null=True)
-    bio = models.TextField(max_length=200)
 
     def __str__(self):
         return self.name
@@ -73,12 +73,14 @@ class Profile(models.Model):
 
     
     @classmethod
-    def get_by_id(cls,id):
-        profile = cls.objects.get(user = id)
+    def get_user_by_hood(cls, id):
+        profile = Profile.objects.filter(hood_id=id).all()
         return profile
 
+
 class Business(models.Model):
-    name = models.CharField(max_length = 65)
+    name = models.CharField(max_length = 60)
+    description = models.TextField(default="business")
     user = models.ForeignKey(User)
     hood = models.ForeignKey(Neighbourhood,blank=True)
     email = models.CharField(max_length=100)
@@ -99,6 +101,18 @@ class Business(models.Model):
         hoods = Business.objects.filter(hood_id=Neighbourhood)
         return hoods
 
+    @classmethod
+    def search_biz(cls, name):
+        biz = cls.objects.filter(name__icontains=name)
+        return biz
+
+
+class Join(models.Model):
+    user = models.OneToOneField(User)
+    hood = models.ForeignKey(Neighbourhood)
+
+    def __str__(self):
+        return self.user
 
 class Post(models.Model):
 
@@ -110,25 +124,5 @@ class Post(models.Model):
     def __str__(self):
         return self.description
 
-class Join(models.Model):
-    user_id = models.OneToOneField(User)
-    hood_id = models.ForeignKey(Neighbourhood)
-
-    def __str__(self):
-        return self.user_id
 
 
-
-class Comments(models.Model):
-    comment = models.CharField(max_length = 600)
-    user = models.ForeignKey(User)
-    post = models.ForeignKey(Post)
-
-    def save_comment(self):
-        self.save()
-
-    def delete_comment(self):
-        self.delete()
-
-    def __str__(self):
-        return self.comment
