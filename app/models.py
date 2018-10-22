@@ -33,6 +33,7 @@ class Neighbourhood(models.Model):
         ('Buruburu', 'Buruburu')
     )
     loc  = models.CharField(max_length=65, choices=locations)
+    hood_photo= models.ImageField(upload_to='images/', blank=True,)
     occupants = models.PositiveIntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
