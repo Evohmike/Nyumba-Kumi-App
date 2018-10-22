@@ -19,13 +19,13 @@ from django.contrib.auth.decorators import login_required
 
 
 # @login_required(login_url = '/accounts/login')
-def index(request):
+def home(request):
     title = 'Nyumba-kumi'
     hoods = Neighbourhood.objects.all()
     business = Business.objects.all()
     posts = Post.objects.all()
 
-    return render(request,'index.html',locals())
+    return render(request,'home.html',locals())
 
 
 def signup(request):
@@ -87,3 +87,24 @@ def all_hoods(request):
         neighbourhoods = Neighbourhood.objects.all()
 
         return render(request, 'hood.html', locals())
+
+
+
+
+@login_required(login_url='/accounts/login/')
+def createHood(request):
+    if request.method == 'POST':
+        form = CreateHoodForm(request.POST)
+        if form.is_valid():
+            hood = form.save(commit = False)
+            hood.user = request.user
+            hood.save()
+            messages.success(request, 'You Have succesfully created a hood.You may now join your neighbourhood')
+            return redirect('hoods')
+    else:
+        form = CreateHoodForm()
+        return render(request,'create.html',{"form":form})
+
+
+
+
