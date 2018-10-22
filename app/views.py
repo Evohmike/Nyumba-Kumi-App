@@ -12,13 +12,21 @@ from .tokens import account_activation_token
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
 
+from .models import *
+
+
 from django.contrib.auth.decorators import login_required
 
+
+# @login_required(login_url = '/accounts/login')
 def index(request):
-
     title = 'Nyumba-kumi'
+    hoods = Neighbourhood.objects.all()
+    business = Business.objects.all()
+    posts = Post.objects.all()
 
-    return render(request, 'index.html', {'title': title})
+    return render(request,'index.html',locals())
+
 
 def signup(request):
     if request.method == 'POST':
@@ -59,3 +67,23 @@ def activate(request, uidb64, token):
         return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
     else:
         return HttpResponse('Activation link is invalid!')
+
+
+@login_required(login_url = '/accounts/login')
+def all_hoods(request):
+
+    if request.user.is_authenticated:
+        if Join.objects.filter(user_id=request.user).exists():
+            hood = Neighbourhood.objects.get(pk=request.user.join.hood_id.id)
+            businesses = Business.objects.filter(hood=request.user.join.hood_id.id)
+            posts = Post.objects.filter(hood=request.user.join.hood_id.id)
+            comments = Comments.objects.all()
+            print(posts)
+            return render(request, "hood.html", locals())
+        else:
+            neighbourhoods = Neighbourhood.objects.all()
+            return render(request, 'hood.html', locals())
+    else:
+        neighbourhoods = Neighbourhood.objects.all()
+
+        return render(request, 'hood.html', locals())
