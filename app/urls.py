@@ -10,6 +10,9 @@ urlpatterns=[
         views.activate, name='activate'),
 
     url(r'^hoods', views.all_hoods, name='hoods'),
+    url(r'^createHood/$', views.createHood, name='createHood'),
+    url(r'^showprofile/(?P<id>\d+)', views.display_profile, name='showprofile'),
+
 
 ]
 
