@@ -22,15 +22,15 @@ def save_user_profile(sender, instance, **kwargs):
 class Neighbourhood(models.Model):
     name = models.CharField(max_length = 65)
     locations = (
-        ('Nairobi', 'Nairobi'),
-        ('Zurich', 'Zurich'),
-        ('Paris', 'Paris'),
-        ('Munich', 'Munich'),
-        ('Tokyo', 'Tokyo'),
-        ('London', 'London'),
-        ('Melbourne', 'Melbourne'),
-        ('Sydney', 'Sydney'),
-        ('Berlin', 'Berlin')
+        ('Umoja', 'Umoja'),
+        ('kasarani', 'Kasarani'),
+        ('Pangani', 'Pangani'),
+        ('Roysambu', 'Roysambu'),
+        ('Syokimau', 'Syokimau'),
+        ('Kiambu', 'Kiambu'),
+        ('karen', 'Karen'),
+        ('Langata', 'Langata'),
+        ('Buruburu', 'Buruburu')
     )
     loc  = models.CharField(max_length=65, choices=locations)
     occupants = models.PositiveIntegerField()
