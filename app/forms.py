@@ -14,4 +14,16 @@ class SignupForm(UserCreationForm):
 class CreateHoodForm(forms.ModelForm):
     class Meta:
         model = Neighbourhood
-        fields = ['name','loc','police','health','occupants']
+        fields = ['name','description','loc','police','health','occupants']
+
+class CreateBizForm(forms.ModelForm):
+    class Meta:
+        model = Business
+        exclude =['user','hood'] 
+
+
+# class CreatePostForm(forms.ModelForm):
+#     class Meta:
+#         model = Posts
+#         exclude =['user','hood'] 
+
