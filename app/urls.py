@@ -14,8 +14,8 @@ urlpatterns=[
     url(r'^createHood/$', views.createHood, name='createHood'),
     url(r'^showprofile/(?P<id>\d+)', views.display_profile, name='showprofile'),
     url(r'^exithood/(\d+)$', views.exithood, name='exithood'),
-
-
+    url(r'^new/createbusiness/$', views.createbusiness, name='createbusiness'),
+    # url(r'^businesses/$',views.businesses,name= 'businesses'),
 ]
 
 if settings.DEBUG:
