@@ -32,6 +32,8 @@ class Neighbourhood(models.Model):
         ('Langata', 'Langata'),
         ('Buruburu', 'Buruburu')
     )
+    description = models.TextField(default="My hood is the best")
+
     loc  = models.CharField(max_length=65, choices=locations)
     occupants = models.PositiveIntegerField()
     police = models.CharField(max_length=15, default='9999')
@@ -57,12 +59,11 @@ class Neighbourhood(models.Model):
         self.delete()
 
 class Profile(models.Model):
-    name = models.CharField(max_length = 70, blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     hood = models.ForeignKey(Neighbourhood, blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        return self.user.username
 
 
     def save_profile(self):
