@@ -114,26 +114,85 @@ def exithood(request, id):
     messages.error(request, "Neighbourhood exited")
     return redirect('home')
 
-@login_required(login_url='/accounts/login/')
-def createbusiness(request):
-    # if Join.objects.filter(user_id = request.user).exists():
-    #     print("user exist")
-    print(request.user.profile)
-    if request.method == 'POST':
-        form = CreateBizForm(request.POST)
-        if form.is_valid():
-            business = form.save(commit = False)
-            business.user = request.user
-            business.hood = request.user.profile.hood
-            business.save()
-            messages.success(request, 'Success! You have created a business')
-            return redirect('home')
-    else:
-        form = CreateBizForm()
-        return render(request, 'business.html', {"form":form})
+# @login_required(login_url='/accounts/login/')
+# def createbusiness(request):
+#     # if Join.objects.filter(user_id = request.user).exists():
+#     #     print("user exist")
+#     print(request.user.profile)
+#     if request.method == 'POST':
+#         form = CreateBizForm(request.POST)
+#         if form.is_valid():
+#             business = form.save(commit = False)
+#             business.user = request.user
+#             business.hood = request.user.profile.hood
+#             business.save()
+#             messages.success(request, 'Success! You have created a business')
+#             return redirect('home')
+#     else:
+#         form = CreateBizForm()
+#         return render(request, 'business.html', {"form":form})
 
 @login_required(login_url='/accounts/login/')
-def businesses(request):
-    biz = Business.objects.all()
-    return render(request,'hood.html',locals())
+def createbiz(request):
+   
+    hoods = Neighbourhood.objects.all()
+    for hood in hoods:
+        if Join.objects.filter(user_id = request.user).exists():
+            if request.method == 'POST':
+                form = CreateBizForm(request.POST)
+                if form.is_valid():
+                    business = form.save(commit = False)
+                    business.user = request.user
+                    business.hood = hood
+                    business.save()
+                    messages.success(request, 'Success! You have created a business')
+                    return redirect('home')
+            else:
+                form = CreateBizForm()
+                return render(request, 'business.html',{"form":form})
+        else:
+            messages.error(request, 'Error! Join a Neighbourhood to create a Business')
+
+
+@login_required(login_url='/accounts/login/')
+def createPost(request):
+    hoods = Neighbourhood.objects.all()
+    for hood in hoods:
+        if Join.objects.filter(user_id = request.user).exists():
+            if request.method == 'POST':
+                form = CreatePostForm(request.POST)
+                if form.is_valid():
+                    post = form.save(commit = False)
+                    post.user = request.user
+                    post.hood = hood
+                    post.save()
+                    messages.success(request,'You have succesfully created a Forum Post')
+                    return redirect('home')
+            else:
+                form = CreatePostForm()
+                return render(request,'post.html',{"form":form})
+        else:
+            messages.error(request, 'Error! You can only create a post after Joining/Creating a neighbourhood')
+
+
+# @login_required(login_url='/accounts/login/')
+# def businesses(request):
+#     biz = Business.objects.all()
+#     return render(request,'hood.html',locals())
+
+
+@login_required(login_url='/accounts/login/')
+def search(request):
+
+    if 'hood' in request.GET and request.GET["hood"]:
+        search_term = request.GET.get("hood")
+        searched_hoods = Neighbourhood.search_by_title(search_term)
+        message = f"{search_term}"
+
+        return render(request, 'search.html',{"message":message,"hood": searched_hoods})
+
+    else:
+        message = "You haven't searched for any hood"
+        return render(request, 'search.html',{"message":message})
+
 

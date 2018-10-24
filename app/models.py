@@ -44,9 +44,9 @@ class Neighbourhood(models.Model):
         verbose_name_plural = 'Location'
 
     @classmethod
-    def search_hood(cls, search_term):
-        hoods = cls.objects.filter(name__icontains=search_term)
-        return hoods
+    def search_by_title(cls,search_term):
+        hood = cls.objects.filter(name__icontains=search_term)
+        return hood
 
     def __str__(self):
         return self.name

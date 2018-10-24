@@ -1,0 +1,42 @@
+{%extends 'base.html' %}
+{% load static%}
+
+{% block styles%}
+{{block.super}}
+<link rel="stylesheet" href="">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  
+  <div class="row">
+    {% if hood %}
+      <h2 style="color:whitesmoke;">Found {{ hood|length }} of searched term {{message}}</h2>
+    {% else %}
+      <h2> Found 0 hoods for the search term {{message}}</h2>
+    {% endif %}
+
+  </div>
+
+  <div class="row">
+ 
+  {% if hood %}
+    {% for hood in hood %}
+      
+<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+  <div class="panel panel-info">
+    <div class="panel-heading">{{hood.name}}</div>
+    <div class="panel-body">
+    <p class="desc">{{hood.description}}</p>
+     <p class="locale">{{hood.location}}</p>
+    </div>
+    <div class="panel-footer">
+    <a href ="{% url 'joinhood' hood.id %}" class="btn btn-primary btn-md">Join</a>
+    </div>
+  </div>
+</div>
+    {% endfor %}
+  {% endif %}
+  </div>
+</div>
+{% endblock%}

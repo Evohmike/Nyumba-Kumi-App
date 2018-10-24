@@ -22,8 +22,8 @@ class CreateBizForm(forms.ModelForm):
         exclude =['user','hood'] 
 
 
-# class CreatePostForm(forms.ModelForm):
-#     class Meta:
-#         model = Posts
-#         exclude =['user','hood'] 
+class CreatePostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        exclude =['user','hood'] 
 
